@@ -292,7 +292,7 @@ const App = () => {
                 </div>
                 <div className="profile-section">
                     {/* Placeholder for actual image */}
-                    <img src="img.jpg" alt="Profile" className="profile-pic" />
+                    <img src="assets/img.jpg" alt="Profile" className="profile-pic" />
                     <div className="profile-info">
                         <h3 className="card-name">SUYASH</h3>
                         <p className="card-title">Code Architect</p>
@@ -340,7 +340,7 @@ const App = () => {
                     <div className="about-content">
                         <div className="about-image">
                             {/* Placeholder for actual image */}
-                            <img src="img.jpg" alt="Profile" /> 
+                            <img src="assets/img.jpg" alt="Profile" /> 
                         </div>
                         <div className="about-text">
                             <p>Hola! I'm Suyash, a Computer Science student passionate about creating innovative solutions. I'm currently pursuing my degree at Mumbai University at VCET, focusing on software development and artificial intelligence.</p>
@@ -368,7 +368,7 @@ const App = () => {
                 <div className="projects-container">
                     {/* Project Card 1 */}
                     <div className="project-card">
-                        <div className="project-image"><img src="on_chain.jpg" alt="CryptoVault" /></div>
+                        <div className="project-image"><img src="assets/on_chain.jpg" alt="CryptoVault" /></div>
                         <div className="project-info">
                             <h3 className="project-title">CryptoVault</h3>
                             <p className="project-desc">This project is a basic cryptocurrency wallet. It allows users to manage their cryptocurrency balances and perform basic operations.</p>
@@ -387,7 +387,7 @@ const App = () => {
 
                     {/* Project Card 2 */}
                     <div className="project-card">
-                        <div className="project-image"><img src="wpm.jpeg" alt="WPM Analyzer" /></div>
+                        <div className="project-image"><img src="assets/wpm.jpeg" alt="WPM Analyzer" /></div>
                         <div className="project-info">
                             <h3 className="project-title">WPM Analyzer</h3>
                             <p className="project-desc">Python based Words Per Minute checker.</p>
@@ -405,7 +405,7 @@ const App = () => {
 
                     {/* Project Card 3 */}
                     <div className="project-card">
-                        <div className="project-image"><img src="notif.jpg" alt="PushAlertX" /></div>
+                        <div className="project-image"><img src="assets/notif.jpg" alt="PushAlertX" /></div>
                         <div className="project-info">
                             <h3 className="project-title">PushAlertX</h3>
                             <p className="project-desc">A real time push notification system in Java.</p>
