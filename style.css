@@ -1,0 +1,909 @@
+:root {
+    /* --- THEME VARIABLES (Default: Light) --- */
+    --ink: #1a1a1a;
+    --paper: #fdfbf7;
+    --glass: rgba(255, 255, 255, 0.65);
+    --glass-solid: rgba(255, 255, 255, 0.8);
+    --nav-bg: rgba(253, 251, 247, 0.7);
+    --nav-scrolled: rgba(255, 255, 255, 0.9);
+    --sub-text: #444;
+    --dot-color: #d1d1d1;
+
+    /* NEON BUTTON VARIABLES */
+    --m: 1.2rem;
+    --red: #FF6565;
+    --pink: #FF64F9;
+    --purple: #6B5FFF;
+    --blue: #4D8AFF;
+    --green: #5BFF89;
+    --yellow: #FFEE55;
+    --orange: #FF6D1B;
+}
+
+/* --- DARK MODE OVERRIDES --- */
+body.dark-mode {
+    --ink: #fdfbf7;
+    --paper: #111111;
+    --glass: rgba(0, 0, 0, 0.65);
+    --glass-solid: rgba(20, 20, 20, 0.8);
+    --nav-bg: rgba(17, 17, 17, 0.7);
+    --nav-scrolled: rgba(17, 17, 17, 0.9);
+    --sub-text: #ccc;
+    --dot-color: #333333;
+}
+
+/* All other CSS styles from the original file go here... */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Courier Prime', monospace;
+}
+
+body {
+    background-color: var(--paper);
+    background-image: radial-gradient(var(--dot-color) 1px, transparent 1px); 
+    background-size: 20px 20px;
+    color: var(--ink);
+    overflow-x: hidden;
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* SVG Styles */
+svg path, svg circle, svg ellipse {
+    transition: fill 0.5s ease, stroke 0.5s ease;
+}
+
+.app-container {
+    position: relative;
+}
+
+/* --- RGB CURSOR CANVAS CSS --- */
+#canvas {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+    z-index: 1; /* Above background */
+    pointer-events: none; /* CRITICAL: Allows clicking through the cursor canvas */
+    opacity: 0; /* Hidden by default (Light mode) */
+    transition: opacity 0.5s ease;
+}
+
+/* Show canvas only in dark mode */
+body.dark-mode #canvas {
+    opacity: 1;
+}
+
+/* --- GRADIENT BUTTON --- */
+.gradient-btn {
+    border: calc(0.08 * var(--m)) solid transparent;
+    position: relative;
+    color: #F3F3F3; 
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: var(--m);
+    border-radius: calc(0.7 * var(--m));
+    padding: calc(0.5 * var(--m)) calc(1 * var(--m));
+    display: inline-flex; 
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    text-decoration: none; 
+    background: linear-gradient(#121213, #121213), 
+                linear-gradient(#121213 50%, rgba(18, 18, 19, 0.6) 80%, rgba(18, 18, 19, 0)), 
+                linear-gradient(90deg, var(--orange), var(--yellow), var(--green), var(--blue), var(--purple), var(--pink), var(--red));
+    background-origin: border-box;
+    background-clip: padding-box, border-box, border-box;
+    background-size: 200%;
+    animation: animate 2s infinite linear;
+    opacity: 0;
+    transform: translateY(20px);
+    box-shadow: 0px 10px 20px rgba(0,0,0,0.2);
+    /* Ensure button is clickable above the cursor canvas */
+    z-index: 5; 
+}
+
+.gradient-btn::before {
+    content: '';
+    background: linear-gradient(90deg, var(--orange), var(--yellow), var(--green), var(--blue), var(--purple), var(--pink), var(--red));
+    height: 30%;
+    width: 60%;
+    position: absolute;
+    bottom: -20%;
+    z-index: -5;
+    background-size: 200%;
+    animation: animate 2s infinite linear;
+    filter: blur(calc(0.8 * var(--m)));
+}
+
+.gradient-btn:hover, .gradient-btn:hover::before {
+    animation: animate 0.5s infinite linear;
+}
+
+@keyframes animate {
+    0% {background-position: 0}
+    100% {background-position: 200%}
+}
+
+@media screen and (max-width: 1000px) {
+    :root { --m: 1rem; }
+}
+
+/* --- NAVBAR & TOGGLE (REVERTED) --- */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background-color: var(--nav-bg);
+    border-bottom: 2px solid var(--ink);
+    transition: all 0.5s ease;
+}
+
+.navbar.scrolled {
+    padding: 1rem 2rem;
+    background-color: var(--nav-scrolled);
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+}
+
+.theme-toggle {
+    background: transparent;
+    border: 2px solid var(--ink);
+    color: var(--ink);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-left: 1.5rem;
+    transition: all 0.3s ease;
+    font-size: 1.2rem;
+}
+
+.theme-toggle:hover {
+    background: var(--ink);
+    color: var(--paper);
+    transform: rotate(15deg);
+}
+
+.logo {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--ink);
+    border: 2px solid var(--ink);
+    padding: 5px 15px;
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-link {
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    position: relative;
+    font-size: 1.1rem;
+}
+
+.nav-link:after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: var(--ink);
+    transition: width 0.3s ease;
+    border-radius: 2px;
+}
+
+.nav-link:hover:after {
+    width: 100%;
+}
+
+.section {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-top: 10vh;
+}
+
+.hero-content {
+    max-width: 900px;
+    z-index: 10;
+}
+
+.hero-title {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--ink);
+    text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.1);
+}
+
+.hero-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 3rem;
+    color: var(--sub-text);
+    opacity: 0;
+    transform: translateY(30px);
+    font-style: italic;
+}
+
+.btn {
+    display: inline-block;
+    background: var(--paper);
+    color: var(--ink);
+    padding: 0.8rem 2rem;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.1rem;
+    transition: all 0.2s ease;
+    border: 3px solid var(--ink);
+    cursor: pointer;
+    box-shadow: 5px 5px 0px var(--ink);
+}
+
+.btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 7px 7px 0px var(--ink);
+    background-color: var(--ink); 
+    color: var(--paper);
+}
+
+.section-title {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 3.5rem;
+    margin-bottom: 3rem;
+    text-align: center;
+    color: var(--ink);
+    opacity: 0;
+    transform: translateY(30px);
+    position: relative;
+    display: inline-block;
+}
+
+.section-title::after {
+    content: '';
+    display: block;
+    width: 100px;
+    height: 5px;
+    background: var(--ink);
+    margin: 10px auto;
+    border-radius: 50%;
+}
+
+.about-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.about-content {
+    display: flex;
+    gap: 3rem;
+    align-items: center;
+    margin-bottom: 3rem;
+}
+
+.about-image {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid var(--ink);
+    opacity: 0;
+    transform: translateX(-50px);
+    box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.15);
+}
+
+.about-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%);
+}
+
+.about-text {
+    flex: 1;
+    opacity: 0;
+    transform: translateX(50px);
+}
+
+.about-text p {
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+    color: var(--ink);
+    font-size: 1.1rem;
+}
+
+.skills-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.skill-pill {
+    background: var(--glass);
+    backdrop-filter: blur(5px);
+    padding: 0.7rem 1.5rem;
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    border: 2px solid var(--ink);
+    font-weight: 700;
+    color: var(--ink);
+    opacity: 0;
+    transform: scale(0.8);
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.projects-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.project-card {
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    overflow: hidden;
+    border: 3px solid var(--ink);
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(50px);
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.1);
+}
+
+.project-card:hover {
+    transform: translateY(-10px) rotate(1deg);
+    box-shadow: 12px 12px 0 var(--ink);
+}
+
+.project-image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    border-bottom: 3px solid var(--ink);
+}
+
+.project-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+    filter: grayscale(100%);
+}
+
+.project-card:hover .project-image img {
+    transform: scale(1.05);
+    filter: grayscale(0%);
+}
+
+.project-info {
+    padding: 1.5rem;
+}
+
+.project-title {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    color: var(--ink);
+    font-weight: 700;
+}
+
+.project-desc {
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    color: var(--sub-text);
+    line-height: 1.6;
+}
+
+.project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.project-tag {
+    background: transparent;
+    padding: 0.3rem 0.8rem;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    color: var(--ink);
+    border: 1px dashed var(--ink);
+    font-weight: bold;
+}
+
+.project-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.project-link {
+    color: var(--ink);
+    text-decoration: underline;
+    font-size: 0.9rem;
+    font-weight: 700;
+    transition: color 0.3s ease;
+}
+
+.project-link:hover {
+    background-color: var(--ink);
+    color: var(--paper);
+    text-decoration: none;
+    padding: 0 5px;
+}
+
+.contact-container {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    border-radius: 5px;
+    padding: 2rem;
+    border: 3px solid var(--ink);
+    opacity: 0;
+    transform: translateY(30px);
+    box-shadow: 10px 10px 0 var(--ink);
+    z-index: 10;
+    overflow: visible;
+}
+
+.contact-form-group {
+    margin-bottom: 1.5rem;
+}
+
+.contact-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    color: var(--ink);
+}
+
+.contact-input,
+.contact-textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    background: var(--glass-solid);
+    border: 2px solid var(--ink);
+    border-radius: 3px;
+    color: var(--ink);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    font-family: 'Courier Prime', monospace;
+}
+
+.contact-input:focus,
+.contact-textarea:focus {
+    outline: none;
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+    transform: translate(-2px, -2px);
+}
+
+.contact-textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+/* --- PUPPY & THANK YOU STYLES --- */
+.puppy-container {
+    position: absolute;
+    bottom: -100px;
+    right: 20px;
+    width: 150px;
+    height: 120px;
+    z-index: -1;
+    transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.puppy-container.peek {
+    bottom: 60px;
+    z-index: 20;
+}
+
+.thank-you-bubble {
+    position: absolute;
+    top: -60px;
+    right: -20px;
+    background: var(--paper);
+    color: var(--ink);
+    border: 2px solid var(--ink);
+    padding: 10px 15px;
+    border-radius: 15px;
+    font-family: 'Patrick Hand', cursive;
+    font-weight: bold;
+    font-size: 1.2rem;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s ease 0.3s;
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.puppy-container.peek .thank-you-bubble {
+    opacity: 1;
+    transform: scale(1) rotate(5deg);
+}
+
+.thank-you-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 20px;
+    border-width: 10px 10px 0;
+    border-style: solid;
+    border-color: var(--ink) transparent;
+    display: block;
+    width: 0;
+}
+
+.footer {
+    text-align: center;
+    padding: 2rem;
+    background: var(--ink);
+    color: var(--paper);
+    backdrop-filter: blur(10px);
+    margin-top: 4rem;
+    border-top: 2px solid var(--ink); 
+}
+
+.footer-content {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.social-link {
+    color: var(--paper);
+    font-size: 1.3rem;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.social-link:hover {
+    color: var(--ink);
+    background: var(--paper);
+    border-color: var(--paper);
+    transform: translateY(-3px);
+}
+
+.glass-blur {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(20px);
+    z-index: 100;
+    transition: height 0.3s ease;
+}
+
+body.dark-mode .glass-blur {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 3rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+
+    .section-title {
+        font-size: 2.5rem;
+    }
+
+    .about-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .about-image {
+        width: 200px;
+        height: 200px;
+        margin-bottom: 2rem;
+    }
+
+    .projects-container {
+        grid-template-columns: 1fr;
+    }
+
+    .nav-links {
+        display: none;
+    }
+}
+
+.particles-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    overflow: hidden;
+}
+
+.particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: var(--ink);
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 1;
+}
+
+/* --- DIGITAL CARD (Sketch ID) --- */
+.digital-card {
+    position: fixed;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    width: 90%;
+    max-width: 350px;
+    background: var(--paper);
+    background-image: linear-gradient(var(--ink) 1px, transparent 1px);
+    background-size: 100% 1.5rem;
+    background-blend-mode: overlay;
+    backdrop-filter: blur(5px);
+    border: 3px solid var(--ink);
+    border-radius: 2px;
+    padding: 1.5rem;
+    color: var(--ink);
+    font-family: 'Courier Prime', monospace;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.8);
+}
+
+body.dark-mode .digital-card {
+    box-shadow: 10px 10px 0 rgba(255, 255, 255, 0.15);
+}
+
+.digital-card::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 30px;
+    background-color: var(--glass);
+    border-left: 1px dashed rgba(0, 0, 0, 0.1);
+    border-right: 1px dashed rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.digital-card.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) scale(1) rotate(-2deg);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--ink);
+    font-weight: bold;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 5px;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: var(--ink);
+    border-radius: 50%;
+    margin-left: 5px;
+    border: 1px solid var(--paper);
+}
+
+.profile-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.profile-pic {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 1rem;
+    border: 2px solid var(--ink);
+    filter: grayscale(100%);
+}
+
+.profile-info {
+    flex-grow: 1;
+}
+
+.card-name {
+    font-size: 1.5rem;
+    margin: 0 0 0.3rem 0;
+    color: var(--ink);
+    font-family: 'Patrick Hand', cursive;
+}
+
+.card-title {
+    font-size: 0.8rem;
+    margin: 0;
+    color: var(--sub-text);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.badges {
+    margin-top: 0.8rem;
+}
+
+.level-badge,
+.verified-badge {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    margin-right: 0.5rem;
+    border: 1px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
+}
+
+.stats-section {
+    margin-bottom: 1.5rem;
+}
+
+.stat-item {
+    margin-bottom: 0.8rem;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.8rem;
+    margin-bottom: 0.3rem;
+    color: var(--ink);
+    font-weight: bold;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 8px;
+    background-color: var(--glass);
+    border: 1px solid var(--ink);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    border-right: 1px solid var(--ink);
+    background: repeating-linear-gradient(45deg, var(--ink), var(--ink) 2px, transparent 2px, transparent 6px);
+}
+
+.stat-value {
+    display: block;
+    font-size: 0.9rem;
+    text-align: right;
+    margin-top: 0.2rem;
+    color: var(--ink);
+    font-family: 'Patrick Hand', cursive;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    color: var(--ink);
+    border-top: 2px dashed var(--ink);
+    padding-top: 1rem;
+}
+
+.active-projects {
+    color: var(--ink);
+    font-weight: bold;
+}
+
+.close-card {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: var(--ink);
+    border: none;
+    font-size: 1.2rem;
+    color: var(--paper);
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    border-radius: 50%;
+}
+
+.close-card:hover {
+    background: var(--red);
+}
+
+.download-card-btn {
+    display: inline-block;
+    background: none;
+    border: 1px solid var(--ink);
+    padding: 2px 8px;
+    border-radius: 3px;
+    color: var(--ink);
+    font-size: 0.8rem;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.download-card-btn:hover {
+    background: var(--ink);
+    color: var(--paper);
+}
