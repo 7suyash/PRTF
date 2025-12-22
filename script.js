@@ -125,7 +125,7 @@ const App = () => {
         });
 
         // About Section Animations
-        gsap.to(".about-image", {
+        gsap.to(".about-image-container", {
             scrollTrigger: { trigger: "#about", start: "top 70%" },
             opacity: 1, x: 0, duration: 0.8, delay: 0.2, ease: "power3.out"
         });
@@ -338,9 +338,17 @@ const App = () => {
                 <h2 className="section-title">About Me</h2>
                 <div className="about-container">
                     <div className="about-content">
-                        <div className="about-image">
-                            {/* Placeholder for actual image */}
-                            <img src="assets/img.jpg" alt="Profile" /> 
+                        <div className="about-image-container">
+                            <div className="flip-card">
+                                <div className="flip-card-inner">
+                                    <div className="flip-card-front">
+                                        <img src="assets/img.jpg" alt="Profile" /> 
+                                    </div>
+                                    <div className="flip-card-back">
+                                        <img src="assets/suyash.svg" alt="Suyash Logo" />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div className="about-text">
                             <p>Hola! I'm Suyash, a Computer Science student passionate about creating innovative solutions. I'm currently pursuing my degree at Mumbai University at VCET, focusing on software development and artificial intelligence.</p>
