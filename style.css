@@ -974,3 +974,13 @@ body.dark-mode .digital-card {
     background: var(--ink);
     color: var(--paper);
 }
+
+/* --- COOL MODE PARTICLES --- */
+.cool-mode-particle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    will-change: transform, opacity;
+}

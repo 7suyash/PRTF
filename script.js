@@ -27,6 +27,61 @@ const SketchPuppy = ({ isVisible }) => {
     );
 };
 
+// --- Custom CoolMode Component ---
+const CoolMode = ({ children, options }) => {
+    const handleEffect = (e) => {
+        const particleUrl = options?.particle || "assets/shine.png";
+            const particleCount = 24; // Number of particles (bigger effect)
+        
+        // Get button position
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = rect.left + rect.width / 2;
+        const y = rect.top + rect.height / 2;
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('img');
+            particle.src = particleUrl;
+            particle.className = 'cool-mode-particle';
+            
+            // Random size between 30px and 60px (bigger)
+            const size = Math.floor(Math.random() * 30) + 30;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            
+            // Initial Position (Centered on button)
+            particle.style.left = `${x}px`;
+            particle.style.top = `${y}px`;
+
+            document.body.appendChild(particle);
+
+            // Random Angle and Velocity
+            const angle = Math.random() * Math.PI * 2;
+            const velocity = Math.random() * 180 + 80; // Distance to travel (faster / farther)
+            const tx = Math.cos(angle) * velocity;
+            const ty = Math.sin(angle) * velocity;
+
+            // Animate using Web Animations API
+            const animation = particle.animate([
+                { transform: 'translate(-50%, -50%) scale(0)', opacity: 1 },
+                { transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(1)`, opacity: 0 }
+            ], {
+                duration: Math.random() * 800 + 500, // Random duration (longer)
+                easing: 'cubic-bezier(0, .9, .57, 1)',
+            });
+
+            // Cleanup after animation
+            animation.onfinish = () => particle.remove();
+        }
+    };
+
+    // Clone the child element (the button) to attach the onClick handler
+    return React.cloneElement(children, {
+        onClick: (e) => {
+            handleEffect(e);
+            if (children.props.onClick) children.props.onClick(e); // Run existing click logic if any
+        }
+    });
+};
 const App = () => {
     const [scrollY, setScrollY] = useState(0);
     const [navbarScrolled, setNavbarScrolled] = useState(false);
@@ -449,9 +504,11 @@ const App = () => {
                             <label className="contact-label">Message</label>
                             <textarea className="contact-textarea" placeholder="Your Message..." name="message" value={formData.message} onChange={handleInputChange} required></textarea>
                         </div>
-                        <button type="submit" className="btn" disabled={formStatus.submitting}>
-                            {formStatus.submitting ? 'Sending...' : 'Send Message'}
-                        </button>
+                        <CoolMode options={{ particle: "assets/shine.png" }}>
+                            <button type="submit" className="btn" disabled={formStatus.submitting}>
+                                {formStatus.submitting ? 'Sending...' : 'Send Message'}
+                            </button>
+                        </CoolMode>
                         {formStatus.success && <p style={{ color: 'var(--ink)', marginTop: '1rem', textAlign: 'center', fontWeight: 'bold' }}>Message sent!</p>}
                         {formStatus.error && <p style={{ color: '#ff0000', marginTop: '1rem', textAlign: 'center' }}>{formStatus.errorMessage}</p>}
                     </form>
