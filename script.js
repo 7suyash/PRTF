@@ -517,7 +517,7 @@ const App = () => {
 
             <footer className="footer">
                 <div className="footer-content">
-                    <p className="copyright">© 2025 Suyash Dhulap</p>
+                    <p className="copyright">© 2026 Suyash Dhulap</p>
                     <div className="social-links">
                         <a href="https://github.com/7suyash" className="social-link"><i className="fab fa-github"></i></a>
                         <a href="https://www.linkedin.com/in/suyash-dhulap-687942318" className="social-link"><i className="fab fa-linkedin"></i></a>
