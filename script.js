@@ -219,7 +219,7 @@ const App = () => {
             const docHeight = document.documentElement.scrollHeight - window.innerHeight;
             const scrollPercent = currentScrollY / docHeight;
             // The height calculation is moved out of the GSAP logic
-            setGlassBlurHeight(scrollPercent * (window.innerHeight * 0.3));
+            setGlassBlurHeight(scrollPercent * (window.innerHeight * 0.1));
         };
 
         window.addEventListener("scroll", handleScroll);
